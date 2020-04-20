@@ -3,6 +3,7 @@ import uuidv4 from 'uuid/v4';
 
 import {
     Component,
+    Input,
     OnInit
 } from '@angular/core';
 
@@ -16,6 +17,9 @@ import { DynModuleService } from '../../dyn-module.service';
 export class DynModuleCom2Component implements OnInit {
 
   id = uuidv4();
+
+  @Input()
+  caller: string;
 
   constructor(
     private appSer: AppService,

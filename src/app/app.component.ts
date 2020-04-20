@@ -47,7 +47,8 @@ export class AppComponent {
     import('./dyn-module/index').then(comIndex => {
       const { DynModuleComponent, DynModuleCom2Component } = comIndex;
       const component: Type<any> = isCom1 ? DynModuleComponent : DynModuleCom2Component;
-      this.appDynModule.createComponent(moduleRef.componentFactoryResolver.resolveComponentFactory(component));
+      const comRef = this.appDynModule.createComponent(moduleRef.componentFactoryResolver.resolveComponentFactory(component));
+      comRef.instance.caller = 'AppComponent';
     });
   }
 
