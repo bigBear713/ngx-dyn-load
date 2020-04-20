@@ -1,16 +1,8 @@
-import {
-    Compiler,
-    ComponentFactoryResolver,
-    Injector,
-    NgModuleFactory,
-    NgModuleRef,
-    Type,
-    ViewChild,
-    ViewContainerRef
-} from '@angular/core';
+import { Compiler, ComponentFactoryResolver, Injector, NgModuleFactory, NgModuleRef, Type, ViewChild, ViewContainerRef, Directive } from '@angular/core';
 
 import { DynModuleModule } from '../dyn-module/dyn-module.module';
 
+@Directive()
 export class BaseFeatureModule {
 
   @ViewChild('dynModule', { read: ViewContainerRef, static: true }) dynModule: ViewContainerRef;
