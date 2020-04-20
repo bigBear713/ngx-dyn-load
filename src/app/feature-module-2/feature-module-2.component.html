@@ -1,7 +1,9 @@
 <p>
   feature-module-2 works!
 </p>
-<button (click)="onDynLoadModule()">动态加载组件</button>
-<div #dynModule></div>
+<button (click)="onDynLoadCom()">动态加载组件</button>
+<ng-container #dynCom></ng-container>
+<button (click)="onDynLoadModule()">动态加载DynModule模块中的组件</button>
+<ng-container #dynModule></ng-container>
 <button (click)="onDynLoadModuleCom()">只动态加载DynModule模块中的组件(需要先加载DynModule模块)</button>
-<div #dynModuleCom></div>
+<ng-container #dynModuleCom></ng-container>

@@ -1,10 +1,21 @@
-import { Compiler, ComponentFactoryResolver, Injector, NgModuleFactory, NgModuleRef, Type, ViewChild, ViewContainerRef, Directive } from '@angular/core';
+import {
+    Compiler,
+    ComponentFactoryResolver,
+    Directive,
+    Injector,
+    NgModuleFactory,
+    NgModuleRef,
+    Type,
+    ViewChild,
+    ViewContainerRef
+} from '@angular/core';
 
 import { DynModuleModule } from '../dyn-module/dyn-module.module';
 
 @Directive()
 export class BaseFeatureModule {
 
+  @ViewChild('dynCom', { read: ViewContainerRef }) dynCom: ViewContainerRef;
   @ViewChild('dynModule', { read: ViewContainerRef, static: true }) dynModule: ViewContainerRef;
   @ViewChild('dynModuleCom', { read: ViewContainerRef, static: true }) dynModuleCom: ViewContainerRef;
 
@@ -17,6 +28,11 @@ export class BaseFeatureModule {
     protected compiler: Compiler,
     protected injector: Injector,
   ) { }
+
+  private async dynLoadTheCom(): Promise<void> {
+    const { DynComponent } = await import('./../dyn-component/dyn-component');
+    this.dynCom.createComponent(this.cfr.resolveComponentFactory(DynComponent));
+  }
 
   private async dynLoadTheModule(): Promise<void> {
     return import('./../dyn-module/dyn-module.module').then(m => {
@@ -45,6 +61,10 @@ export class BaseFeatureModule {
     } else {
       return this.compiler.compileModuleAsync(module);
     }
+  }
+
+  onDynLoadCom(): void {
+    this.dynLoadTheCom();
   }
 
   onDynLoadModule(): void {
