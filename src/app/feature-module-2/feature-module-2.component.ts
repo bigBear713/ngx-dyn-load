@@ -21,6 +21,7 @@ export class FeatureModule2Component extends BaseFeatureModule implements OnInit
     injector: Injector,
   ) {
     super(cfr, compiler, injector);
+    this.caller = 'FeatureModule2Component';
   }
 
   ngOnInit() {

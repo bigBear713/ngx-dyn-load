@@ -9,8 +9,6 @@ import {
     ViewContainerRef
 } from '@angular/core';
 
-import { DynModuleCom2Component } from '../dyn-module/components/dyn-module-com-2/dyn-module-com-2.component';
-import { DynModuleComponent } from '../dyn-module/dyn-module.component';
 import { DynModuleModule } from '../dyn-module/dyn-module.module';
 
 export class BaseFeatureModule {
@@ -19,6 +17,8 @@ export class BaseFeatureModule {
   @ViewChild('dynModuleCom', { read: ViewContainerRef, static: true }) dynModuleCom: ViewContainerRef;
 
   protected dynModuleModuleRef: NgModuleRef<DynModuleModule>;
+
+  protected caller: string;
 
   constructor(
     protected cfr: ComponentFactoryResolver,
@@ -39,8 +39,12 @@ export class BaseFeatureModule {
   private dynLoadTheModuleCom(moduleRef: NgModuleRef<DynModuleModule>, isCom1: boolean = true): void {
     // 这边必须用moduleRef.componentFactoryResolver加载组件，
     // 如果用this.cfr会报DI错误
-    const component: Type<DynModuleComponent | DynModuleCom2Component> = isCom1 ? DynModuleComponent : DynModuleCom2Component;
-    this.dynModule.createComponent(moduleRef.componentFactoryResolver.resolveComponentFactory(component));
+    import('./../dyn-module/index').then(comIndex => {
+      const { DynModuleComponent, DynModuleCom2Component } = comIndex;
+      const component: Type<any> = isCom1 ? DynModuleComponent : DynModuleCom2Component;
+      const comRef = this.dynModule.createComponent(moduleRef.componentFactoryResolver.resolveComponentFactory(component));
+      comRef.instance.caller = this.caller;
+    });
   }
 
   private loadModuleFactory(module: any): Promise<NgModuleFactory<any>> {
