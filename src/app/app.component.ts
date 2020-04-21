@@ -32,6 +32,8 @@ export class AppComponent {
   }
 
   private async dynLoadTheModule(): Promise<void> {
+    // 模块的引入一般只要一次就行，后面如果要引入模块中的其它组件，
+    // 直接引入并加载组件就可以，不用再引入初始化模块
     return import('./dyn-module/dyn-module.module').then(m => {
       return this.loadModuleFactory(m.DynModuleModule).then(moduleFactory => {
         const moduleRef = moduleFactory.create(this.injector);
@@ -56,7 +58,7 @@ export class AppComponent {
     if (module instanceof NgModuleFactory) {
       return new Promise(resolve => resolve(module));
     } else {
-      // 这个this.compiler在aot编译下虽然能编译成功，但是会报错
+      // 这个this.compiler在ng8下aot编译下虽然能编译成功，但是会报错
       return this.compiler.compileModuleAsync(module);
     }
   }

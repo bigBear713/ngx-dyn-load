@@ -19,6 +19,8 @@ export class DynComponent {
 
   id = uuidv4();
 
+  test = '能见到我说明插值表达式可以正常使用';
+
   constructor(
     private appSer: AppService
   ) {
