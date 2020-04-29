@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 
 import { BaseFeatureModule } from '../base/base-feature-module';
+import { DynLoaderService } from '../dyn-loader.service';
 
 @Component({
   selector: 'feature-module-2',
@@ -17,10 +18,10 @@ export class FeatureModule2Component extends BaseFeatureModule implements OnInit
 
   constructor(
     cfr: ComponentFactoryResolver,
-    compiler: Compiler,
     injector: Injector,
+    dynLoader: DynLoaderService,
   ) {
-    super(cfr, compiler, injector);
+    super(cfr, injector, dynLoader);
     this.caller = 'FeatureModule2Component';
   }
 
