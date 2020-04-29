@@ -21,10 +21,6 @@ import { DynModuleService } from './dyn-module.service';
     DynModuleComponent,
     DynModuleCom2Component
   ],
-  entryComponents: [
-    DynModuleComponent,
-    DynModuleCom2Component
-  ],
   providers: [DynModuleService]
 })
 export class DynModuleModule { }

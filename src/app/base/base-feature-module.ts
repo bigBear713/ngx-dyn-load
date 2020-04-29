@@ -1,34 +1,44 @@
-import { Compiler, ComponentFactoryResolver, Injector, NgModuleFactory, NgModuleRef, Type, ViewChild, ViewContainerRef, Directive } from '@angular/core';
+import {
+    ComponentFactoryResolver,
+    Injector,
+    NgModuleFactory,
+    NgModuleRef,
+    Type,
+    ViewChild,
+    ViewContainerRef
+} from '@angular/core';
 
-import { DynModuleModule } from '../dyn-module/dyn-module.module';
+import { DynLoaderService } from '../dyn-loader.service';
 
-@Directive()
 export class BaseFeatureModule {
 
+  @ViewChild('dynCom', { read: ViewContainerRef }) dynCom: ViewContainerRef;
   @ViewChild('dynModule', { read: ViewContainerRef, static: true }) dynModule: ViewContainerRef;
   @ViewChild('dynModuleCom', { read: ViewContainerRef, static: true }) dynModuleCom: ViewContainerRef;
 
-  protected dynModuleModuleRef: NgModuleRef<DynModuleModule>;
+  protected dynModuleModuleRef: NgModuleRef<any>;
 
   protected caller: string;
 
   constructor(
     protected cfr: ComponentFactoryResolver,
-    protected compiler: Compiler,
     protected injector: Injector,
+    protected dynLoader: DynLoaderService,
   ) { }
 
-  private async dynLoadTheModule(): Promise<void> {
-    return import('./../dyn-module/dyn-module.module').then(m => {
-      return this.loadModuleFactory(m.DynModuleModule).then(moduleFactory => {
-        const moduleRef = moduleFactory.create(this.injector);
-        this.dynModuleModuleRef = moduleRef;
-        this.dynLoadTheModuleCom(moduleRef);
-      });
-    });
+  private async dynLoadTheCom(): Promise<void> {
+    const { DynComponent } = await import('./../dyn-component/dyn-component');
+    this.dynCom.createComponent(this.cfr.resolveComponentFactory(DynComponent));
   }
 
-  private dynLoadTheModuleCom(moduleRef: NgModuleRef<DynModuleModule>, isCom1: boolean = true): void {
+  private async dynLoadTheModule(): Promise<void> {
+    const moduleFactory = await this.dynLoader.getModuleFactory('dyn-module');
+    const moduleRef = moduleFactory.create(this.injector);
+    this.dynModuleModuleRef = moduleRef;
+    this.dynLoadTheModuleCom(moduleRef);
+  }
+
+  private dynLoadTheModuleCom(moduleRef: NgModuleRef<any>, isCom1: boolean = true): void {
     // 这边必须用moduleRef.componentFactoryResolver加载组件，
     // 如果用this.cfr会报DI错误
     import('./../dyn-module/index').then(comIndex => {
@@ -39,12 +49,8 @@ export class BaseFeatureModule {
     });
   }
 
-  private loadModuleFactory(module: any): Promise<NgModuleFactory<any>> {
-    if (module instanceof NgModuleFactory) {
-      return new Promise(resolve => resolve(module));
-    } else {
-      return this.compiler.compileModuleAsync(module);
-    }
+  onDynLoadCom(): void {
+    this.dynLoadTheCom();
   }
 
   onDynLoadModule(): void {

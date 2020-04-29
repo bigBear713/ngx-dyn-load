@@ -1,5 +1,7 @@
 <p>
   这是DynModuleModule动态加载模块中的组件,在{{caller}}处被调用
 </p>
+<!-- 测试引用其它模块中的组件 -->
 <app-widget-module></app-widget-module>
-<app-dyn-module-com-2 [caller]="'DynModuleComponent'"></app-dyn-module-com-2>
+<!-- 测试ngFor指令 -->
+<app-dyn-module-com-2 *ngFor="let item of list" [caller]="'DynModuleComponent'"></app-dyn-module-com-2>

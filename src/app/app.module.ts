@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { AppRoutesModule } from './app.routing';
+import { dynLoadModulsList } from './config/dyn-load';
+import { DYN_LOAD } from './config/tokens';
 
 @NgModule({
   declarations: [
@@ -12,7 +14,10 @@ import { AppRoutesModule } from './app.routing';
     BrowserModule,
     AppRoutesModule,
   ],
-  providers: [],
+  providers: [
+    //  ng9 中动态加载变得更容易
+    // { provide: DYN_LOAD, useFactory: dynLoadModulsList }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

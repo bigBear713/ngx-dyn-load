@@ -20,6 +20,8 @@ export class DynModuleComponent implements OnInit {
   @Input()
   caller: string;
 
+  list = [];
+
   constructor(
     private appSer: AppService,
     private dynModuleSer: DynModuleService,
@@ -33,6 +35,7 @@ export class DynModuleComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.list = (new Array(5)).fill('');
   }
 
 }

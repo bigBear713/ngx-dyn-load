@@ -1,6 +1,7 @@
 import {
     Compiler,
     Component,
+    Inject,
     Injector,
     NgModuleFactory,
     NgModuleRef,
@@ -9,7 +10,7 @@ import {
     ViewContainerRef
 } from '@angular/core';
 
-import { DynModuleModule } from './dyn-module/dyn-module.module';
+import { DynLoaderService } from './dyn-loader.service';
 
 @Component({
   selector: 'app-root',
@@ -20,8 +21,8 @@ export class AppComponent {
   @ViewChild('appDynModule', { read: ViewContainerRef, static: true }) appDynModule: ViewContainerRef;
 
   constructor(
-    protected compiler: Compiler,
     protected injector: Injector,
+    private dynLoader: DynLoaderService,
   ) { }
 
   ngOnInit() {
@@ -32,15 +33,13 @@ export class AppComponent {
   }
 
   private async dynLoadTheModule(): Promise<void> {
-    return import('./dyn-module/dyn-module.module').then(m => {
-      return this.loadModuleFactory(m.DynModuleModule).then(moduleFactory => {
-        const moduleRef = moduleFactory.create(this.injector);
-        this.dynLoadTheModuleCom(moduleRef);
-      });
-    });
+    // 必须通过工厂提供商的方式注入，才能在aot下正常使用
+    const moduleFactory = await this.dynLoader.getModuleFactory('dyn-module');
+    const moduleRef = moduleFactory.create(this.injector);
+    this.dynLoadTheModuleCom(moduleRef);
   }
 
-  private dynLoadTheModuleCom(moduleRef: NgModuleRef<DynModuleModule>, isCom1: boolean = true): void {
+  private dynLoadTheModuleCom(moduleRef: NgModuleRef<any>, isCom1: boolean = true): void {
     // 这边必须用moduleRef.componentFactoryResolver加载组件，
     // 如果用this.cfr会报DI错误
     // 需要通过import的方式引入要加载的组件，否则相关代码还是会编译在main.js中
@@ -50,15 +49,6 @@ export class AppComponent {
       const comRef = this.appDynModule.createComponent(moduleRef.componentFactoryResolver.resolveComponentFactory(component));
       comRef.instance.caller = 'AppComponent';
     });
-  }
-
-  private loadModuleFactory(module: any): Promise<NgModuleFactory<any>> {
-    if (module instanceof NgModuleFactory) {
-      return new Promise(resolve => resolve(module));
-    } else {
-      // 这个this.compiler在aot编译下虽然能编译成功，但是会报错
-      return this.compiler.compileModuleAsync(module);
-    }
   }
 
 }
