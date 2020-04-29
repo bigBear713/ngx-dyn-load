@@ -14,7 +14,10 @@ import { DYN_LOAD } from './config/tokens';
     BrowserModule,
     AppRoutesModule,
   ],
-  providers: [{ provide: DYN_LOAD, useFactory: dynLoadModulsList }],
+  providers: [
+    //  ng9 中动态加载变得更容易
+    // { provide: DYN_LOAD, useFactory: dynLoadModulsList }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
