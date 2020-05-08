@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 
 import { DynLoaderService } from './dyn-loader.service';
+import { LogService } from './log.service';
 
 @Component({
   selector: 'app-root',
@@ -19,11 +20,14 @@ import { DynLoaderService } from './dyn-loader.service';
 })
 export class AppComponent {
   @ViewChild('appDynModule', { read: ViewContainerRef, static: true }) appDynModule: ViewContainerRef;
-
+  logMsgs: string[] = [];
   constructor(
     protected injector: Injector,
     private dynLoader: DynLoaderService,
-  ) { }
+    private log: LogService,
+  ) {
+    this.log.subscribeLogMsg().subscribe(msg => this.logMsgs.push(msg));
+  }
 
   ngOnInit() {
     this.dynLoadTheModule();
