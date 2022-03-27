@@ -1,15 +1,8 @@
-import {
-    ComponentFactoryResolver,
-    Injector,
-    NgModuleFactory,
-    NgModuleRef,
-    Type,
-    ViewChild,
-    ViewContainerRef
-} from '@angular/core';
+import { ComponentFactoryResolver, Injector, NgModuleFactory, NgModuleRef, Type, ViewChild, ViewContainerRef, Directive } from '@angular/core';
 
 import { DynLoaderService } from '../dyn-loader.service';
 
+@Directive()
 export class BaseFeatureModule {
 
   @ViewChild('dynCom', { read: ViewContainerRef }) dynCom: ViewContainerRef;
