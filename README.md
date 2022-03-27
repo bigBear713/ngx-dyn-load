@@ -1,5 +1,5 @@
 # 动态加载组件
-- demo访问地址：https://wjx774326739.github.io/ngx-dyn-load/
+- demo访问地址：https://bigbear713.github.io/ngx-dyn-load/
 
 ## 动态加载一个不属于任何一个NgModule的组件（angular9）
 - 可以动态加载一个不属于任何一个NgModule的组件；
