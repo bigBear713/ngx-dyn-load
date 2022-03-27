@@ -1,9 +1,9 @@
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
-    Component,
-    Input,
-    OnInit
+  Component,
+  Input,
+  OnInit
 } from '@angular/core';
 
 import { AppService } from '../app.service';

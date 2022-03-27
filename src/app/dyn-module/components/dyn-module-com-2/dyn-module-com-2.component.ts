@@ -1,11 +1,11 @@
 import { AppService } from 'src/app/app.service';
 import { LogService } from 'src/app/log.service';
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
-    Component,
-    Input,
-    OnInit
+  Component,
+  Input,
+  OnInit
 } from '@angular/core';
 
 import { DynModuleService } from '../../dyn-module.service';
